@@ -13,9 +13,6 @@
 //
 // Raspberry Pi Pico pico-sdk LCD ILI9341 Graphics Library (C++)
 //                                 https://twitter.com/yama23238
-//   Require:
-//      yama_2_GFX.cpp
-//      https://pastebin.com
 //
 //      これらのプログラムの使用に当たってはご自分の責任において使用してください
 //      これらのプログラムで発生したいかなる損害、データの消失、金銭等の責任は一切負いません。
