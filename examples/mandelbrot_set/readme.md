@@ -11,8 +11,8 @@ USBシリアルに出力したい場合はCMakeLists.txtの最後の方の3行�
     pico_add_extra_outputs(mandelbrot_set)
   
   
+![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
 ソースコードに書かれてるMOSI、SCK、CS、MISOやRST、DCの番号はGPIOの番号です  
-https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg  
 上記画像で緑で書かれてる番号になります。  
 ソースコードの例では実際のピン番号は下記のようになります。  
 #define MOSI 19    // ピン番号25  
