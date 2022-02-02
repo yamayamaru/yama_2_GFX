@@ -25,4 +25,4 @@ USBシリアルに出力したい場合はCMakeLists.txtの最後の方の3行�
   
 画像からGP19、GP18、GP17、GP16のSPIはSPI0なので  
 ソースコードの例ではSPIのポート番号は下記のようにspi0を指定してます  
-`#define SPI_PORT  spi0`
+    #define SPI_PORT  spi0
