@@ -1,8 +1,8 @@
 yama_2_GFX.h、yama_2_GFX.cpp、random_circle.cpp、CMakeLists.txtを同じフォルダに置き pico-sdkでビルドしてください。  
   
   
+![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
 ソースコードに書かれてるMOSI、SCK、CS、MISOやRST、DCの番号はGPIOの番号です  
-https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg  
 上記画像で緑で書かれてる番号になります。  
 ソースコードの例では実際のピン番号は下記のようになります。  
 #define MOSI 19    // ピン番号25  
