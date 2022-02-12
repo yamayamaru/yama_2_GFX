@@ -19,7 +19,7 @@ yama_2_GFXにdrawPalette256Bitmapを追加しました。
 これにより、GFXcanvas8で描画しておき、  
 GFXcanvas8のバッファの内容を更新したいタイミングで  
 yama_2_GFX_ILI9341のdrawPalette256Bitmapを使ってLCDに描画することで  
-8bitカラーのフレームバッファのように使うことができます。
+8bitカラーのフレームバッファのように使うことができます。  
 また、GFXCanvas16やILI9341LCDに8bitカラーのbitmapを表示することもできます。  
 今まではGFXcanvas16で同様のことができていたのですが、  
 GFXcanvas8を使うことで使用するRAM容量を減らすことができます。  
