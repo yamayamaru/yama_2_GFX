@@ -23,6 +23,8 @@ yama_2_GFX_ILI9341のdrawPalette256Bitmapを使ってLCDに描画することで
 また、GFXCanvas16やILI9341LCDに8bitカラーのbitmapを表示することもできます。  
 今まではGFXcanvas16で同様のことができていたのですが、  
 GFXcanvas8を使うことで使用するRAM容量を減らすことができます。  
+(GFXcanvas16で240x320のバッファを確保するのに150KB必要ですが  
+GFXcanvas8では半分の75KBで済みます。)  
   
 drawPalette256BitmapではILI9341のLCDやGFXcanvas16に描画する際に  
 256色のパレットで色を変換することが可能です。  
