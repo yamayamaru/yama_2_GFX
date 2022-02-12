@@ -1,7 +1,7 @@
 # yama_2_GFX
 
 yama_2_GFXはRaspberry Pi Picoの公式C/C++開発ツールのpico-sdk用のグラフィックスライブラリです。  
-C++で書かれています。  
+プログラム全体がC++で書かれていて、C++用のライブラリになってます。  
 yama_2_GFXはILI9341搭載のLCD専用です。  
 文字表示するには別途print_GFX_ILI9341も使ってください。  
 <https://github.com/yamayamaru/print_GFX_ILI9341>  
