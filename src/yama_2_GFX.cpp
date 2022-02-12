@@ -1,5 +1,5 @@
 // yama_2_GFX.cpp
-// Version : 0.3
+// Version : 0.3.1
 //    
 //    Copyright (c) 2012 Adafruit Industries.
 //    Released under the BSD License
@@ -10,6 +10,10 @@
 //    Released under the MIT License
 //    https://github.com/h-nari/Humblesoft_ILI9341/blob/master/LICENSE
 //
+//      これらのプログラムの使用に当たってはご自分の責任において使用してください
+//      これらのプログラムで発生したいかなる損害、データの消失、金銭等の責任は一切負いません。
+//
+
 #include "yama_2_GFX.h"
  
 yama_2_GFX::yama_2_GFX(int16_t w, int16_t h){
@@ -18,6 +22,7 @@ yama_2_GFX::yama_2_GFX(int16_t w, int16_t h){
     _width = WIDTH;
     _height = HEIGHT;
     rotation = 0;
+    setDefaultPalette256();
 }
  
 void yama_2_GFX::writeLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1,
@@ -469,7 +474,44 @@ void yama_2_GFX::drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w,
   }
   endWrite();
 }
- 
+
+
+
+void yama_2_GFX::drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap01, const uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            if (bit_test(bitmap_mask01, n)) {
+                writePixel(x + i, y + j, (bit_test(bitmap01, n)) ? fg : bg);
+            }
+        }
+    }
+    endWrite();
+}
+
+void yama_2_GFX::drawBitmap(int16_t x, int16_t y, uint8_t *bitmap01, uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            if (bit_test(bitmap_mask01, n)) {
+                writePixel(x + i, y + j, (bit_test(bitmap01, n)) ? fg : bg);
+            }
+        }
+    }
+    endWrite();
+}
+
+
+
+
 void yama_2_GFX::drawXBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
                                int16_t w, int16_t h, uint16_t color) {
  
@@ -641,7 +683,128 @@ uint16_t yama_2_GFX::width(void){
 uint16_t yama_2_GFX::height(void){
     return _height;
 }
- 
+
+
+
+void yama_2_GFX::drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t width, int16_t height) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            writePixel(x + i, y + j, palette256_table[bitmap[n]]);
+        }
+    }
+    endWrite();
+}
+
+void yama_2_GFX::drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t width, int16_t height) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            if (bit_test(bitmap_mask, n)) {
+                writePixel(x + i, y + j, palette256_table[bitmap[n]]);
+            }
+        }
+    }
+    endWrite();
+}
+
+void yama_2_GFX::setDefaultPalette256() {
+    memcpy(palette256_table, default_palette256_data, palette_number * 2);
+}
+
+void yama_2_GFX::setWeb216Palette256() {
+    memcpy(palette256_table, web216_palette256_data, palette_number * 2);
+    
+}
+
+void yama_2_GFX::setPalette256(uint8_t palette_num, uint16_t color) {
+    palette256_table[palette_num] = color;
+}
+
+uint16_t yama_2_GFX::getPalette256(uint8_t palette_num) {
+    return palette256_table[palette_num];
+}
+
+const uint16_t yama_2_GFX::default_palette256_data[] = {
+    0x0000, 0x8000, 0x0400, 0x8400, 0x0010, 0x8010, 0x0410, 0xc618, 
+    0xc6f8, 0xa65e, 0x29f5, 0x29ff, 0x2ae0, 0x2aea, 0x2af5, 0x2aff, 
+    0x2be0, 0x2bea, 0x2bf5, 0x2bff, 0x2ce0, 0x2cea, 0x2cf5, 0x2cff, 
+    0x2de0, 0x2dea, 0x2df5, 0x2dff, 0x2ee0, 0x2eea, 0x2ef5, 0x2eff, 
+    0x2fe0, 0x2fea, 0x2ff5, 0x2fff, 0x5000, 0x500a, 0x5015, 0x501f, 
+    0x50e0, 0x50ea, 0x50f5, 0x50ff, 0x51e0, 0x51ea, 0x51f5, 0x51ff, 
+    0x52e0, 0x52ea, 0x52f5, 0x52ff, 0x53e0, 0x53ea, 0x53f5, 0x53ff, 
+    0x54e0, 0x54ea, 0x54f5, 0x54ff, 0x55e0, 0x55ea, 0x55f5, 0x55ff, 
+    0x56e0, 0x56ea, 0x56f5, 0x56ff, 0x57e0, 0x57ea, 0x57f5, 0x57ff, 
+    0x7800, 0x780a, 0x7815, 0x781f, 0x78e0, 0x78ea, 0x78f5, 0x78ff, 
+    0x79e0, 0x79ea, 0x79f5, 0x79ff, 0x7ae0, 0x7aea, 0x7af5, 0x7aff, 
+    0x7be0, 0x7bea, 0x7bf5, 0x7bff, 0x7ce0, 0x7cea, 0x7cf5, 0x7cff, 
+    0x7de0, 0x7dea, 0x7df5, 0x7dff, 0x7ee0, 0x7eea, 0x7ef5, 0x7eff, 
+    0x7fe0, 0x7fea, 0x7ff5, 0x7fff, 0xa800, 0xa80a, 0xa815, 0xa81f, 
+    0xa8e0, 0xa8ea, 0xa8f5, 0xa8ff, 0xa9e0, 0xa9ea, 0xa9f5, 0xa9ff, 
+    0xaae0, 0xaaea, 0xaaf5, 0xaaff, 0xabe0, 0xabea, 0xabf5, 0xabff, 
+    0xace0, 0xacea, 0xacf5, 0xacff, 0xade0, 0xadea, 0xadf5, 0xadff, 
+    0xaee0, 0xaeea, 0xaef5, 0xaeff, 0xafe0, 0xafea, 0xaff5, 0xafff, 
+    0xd000, 0xd00a, 0xd015, 0xd01f, 0xd0e0, 0xd0ea, 0xd0f5, 0xd0ff, 
+    0xd1e0, 0xd1ea, 0xd1f5, 0xd1ff, 0xd2e0, 0xd2ea, 0xd2f5, 0xd2ff, 
+    0xd3e0, 0xd3ea, 0xd3f5, 0xd3ff, 0xd4e0, 0xd4ea, 0xd4f5, 0xd4ff, 
+    0xd5e0, 0xd5ea, 0xd5f5, 0xd5ff, 0xd6e0, 0xd6ea, 0xd6f5, 0xd6ff, 
+    0xd7e0, 0xd7ea, 0xd7f5, 0xd7ff, 0xf80a, 0xf815, 0xf8e0, 0xf8ea, 
+    0xf8f5, 0xf8ff, 0xf9e0, 0xf9ea, 0xf9f5, 0xf9ff, 0xfae0, 0xfaea, 
+    0xfaf5, 0xfaff, 0xfbe0, 0xfbea, 0xfbf5, 0xfbff, 0xfce0, 0xfcea, 
+    0xfcf5, 0xfcff, 0xfde0, 0xfdea, 0xfdf5, 0xfdff, 0xfee0, 0xfeea, 
+    0xfef5, 0xfeff, 0xffea, 0xfff5, 0xce7f, 0xfe7f, 0x37ff, 0x67ff, 
+    0x9fff, 0xcfff, 0x03e0, 0x03ea, 0x03f5, 0x03ff, 0x04e0, 0x04ea, 
+    0x04f5, 0x04ff, 0x05e0, 0x05ea, 0x05f5, 0x05ff, 0x06e0, 0x06ea, 
+    0x06f5, 0x06ff, 0x07ea, 0x07f5, 0x2800, 0x280a, 0x2815, 0x281f, 
+    0x28e0, 0x28ea, 0x28f5, 0x28ff, 0x29e0, 0x29ea, 0xffde, 0xa514, 
+    0x8410, 0xf800, 0x07e0, 0xffe0, 0x001f, 0xf81f, 0x07ff, 0xffff
+};
+
+const uint16_t yama_2_GFX::web216_palette256_data[] = {
+    0xffff, 0xfff9, 0xfff3, 0xffed, 0xffe6, 0xffe0, 0xfe5f, 0xfe59, 
+    0xfe53, 0xfe4d, 0xfe46, 0xfe40, 0xfcdf, 0xfcd9, 0xfcd3, 0xfccd, 
+    0xfcc6, 0xfcc0, 0xfb5f, 0xfb59, 0xfb53, 0xfb4d, 0xfb46, 0xfb40, 
+    0xf99f, 0xf999, 0xf993, 0xf98d, 0xf986, 0xf980, 0xf81f, 0xf819, 
+    0xf813, 0xf80d, 0xf806, 0xf800, 0xcfff, 0xcff9, 0xcff3, 0xcfed, 
+    0xcfe6, 0xcfe0, 0xce5f, 0xce59, 0xce53, 0xce4d, 0xce46, 0xce40, 
+    0xccdf, 0xccd9, 0xccd3, 0xcccd, 0xccc6, 0xccc0, 0xcb5f, 0xcb59, 
+    0xcb53, 0xcb4d, 0xcb46, 0xcb40, 0xc99f, 0xc999, 0xc993, 0xc98d, 
+    0xc986, 0xc980, 0xc81f, 0xc819, 0xc813, 0xc80d, 0xc806, 0xc800, 
+    0x9fff, 0x9ff9, 0x9ff3, 0x9fed, 0x9fe6, 0x9fe0, 0x9e5f, 0x9e59, 
+    0x9e53, 0x9e4d, 0x9e46, 0x9e40, 0x9cdf, 0x9cd9, 0x9cd3, 0x9ccd, 
+    0x9cc6, 0x9cc0, 0x9b5f, 0x9b59, 0x9b53, 0x9b4d, 0x9b46, 0x9b40, 
+    0x999f, 0x9999, 0x9993, 0x998d, 0x9986, 0x9980, 0x981f, 0x9819, 
+    0x9813, 0x980d, 0x9806, 0x9800, 0x6fff, 0x6ff9, 0x6ff3, 0x6fed, 
+    0x6fe6, 0x6fe0, 0x6e5f, 0x6e59, 0x6e53, 0x6e4d, 0x6e46, 0x6e40, 
+    0x6cdf, 0x6cd9, 0x6cd3, 0x6ccd, 0x6cc6, 0x6cc0, 0x6b5f, 0x6b59, 
+    0x6b53, 0x6b4d, 0x6b46, 0x6b40, 0x699f, 0x6999, 0x6993, 0x698d, 
+    0x6986, 0x6980, 0x681f, 0x6819, 0x6813, 0x680d, 0x6806, 0x6800, 
+    0x37ff, 0x37f9, 0x37f3, 0x37ed, 0x37e6, 0x37e0, 0x365f, 0x3659, 
+    0x3653, 0x364d, 0x3646, 0x3640, 0x34df, 0x34d9, 0x34d3, 0x34cd, 
+    0x34c6, 0x34c0, 0x335f, 0x3359, 0x3353, 0x334d, 0x3346, 0x3340, 
+    0x319f, 0x3199, 0x3193, 0x318d, 0x3186, 0x3180, 0x301f, 0x3019, 
+    0x3013, 0x300d, 0x3006, 0x3000, 0x07ff, 0x07f9, 0x07f3, 0x07ed, 
+    0x07e6, 0x07e0, 0x065f, 0x0659, 0x0653, 0x064d, 0x0646, 0x0640, 
+    0x04df, 0x04d9, 0x04d3, 0x04cd, 0x04c6, 0x04c0, 0x035f, 0x0359, 
+    0x0353, 0x034d, 0x0346, 0x0340, 0x019f, 0x0199, 0x0193, 0x018d, 
+    0x0186, 0x0180, 0x001f, 0x0019, 0x0013, 0x000d, 0x0006, 0x0000, 
+    0x8410, 0xc618, 0x0010, 0x0410, 0x0400, 0x8400, 0x8010, 0x8000, 
+    0xffdf, 0xf79e, 0xef5d, 0xe71c, 0xdedb, 0xd69a, 0xce59, 0xc618, 
+    0xbdd7, 0xb596, 0xad55, 0xa514, 0x9cd3, 0x9492, 0x8c51, 0x8410, 
+    0x7bcf, 0x738e, 0x6b4d, 0x630c, 0x5acb, 0x528a, 0x4a49, 0x4208, 
+    0x39c7, 0x3186, 0x2945, 0x2104, 0x18c3, 0x1082, 0x0841, 0x0000
+};
+
+
+
+
  
  
 yama_2_GFX_ILI9341::yama_2_GFX_ILI9341(spi_inst_t *inst, int32_t dc, int32_t rst, int32_t cs) :
@@ -1010,7 +1173,119 @@ void yama_2_GFX_ILI9341::drawRGBBitmap(int16_t x, int16_t y,
   pixel_flush();
   spi_end();
 }
+
+
+
+
+void yama_2_GFX_ILI9341::drawRGBBitmap(int16_t x, int16_t y,
+                           const uint16_t bitmap[], const uint8_t bitmap_mask[],
+                           int16_t w, int16_t h) {
+    yama_2_GFX::drawRGBBitmap(x, y, bitmap, bitmap_mask, w, h);
+}
+
+void yama_2_GFX_ILI9341::drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                    int16_t w, int16_t h,
+                    uint16_t color) {
+    yama_2_GFX::drawBitmap(x, y, bitmap, w, h, color);
+}
+
+void yama_2_GFX_ILI9341::drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap01, const uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg) {
+    yama_2_GFX::drawBitmap(x, y, bitmap01, bitmap_mask01, width, height, fg, bg);
+}
+
+void yama_2_GFX_ILI9341::drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[],
+                       int16_t w, int16_t h, bool red_flag, bool green_flag, bool blue_flag, bool invert) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
+  uint32_t red, green, blue;
+  uint16_t c, col;
+
+  if (red_flag)   red = 0x1f;
+  else            red = 0;
+  if (green_flag) green = 0x1f;
+  else            green = 0;
+  if (blue_flag)  blue = 0x1f;
+  else            blue = 0;
+
+  spi_begin();
+  setAddrWindow(x, y, x+w-1, y+h-1);
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      c = (uint16_t)*p++;
+      if (invert)
+          col = (uint16_t)(((((255 - c) >> 3) & red) << 11) | (((((255 - c) >> 3) & green) << 1) << 5) | (((255 - c) >> 3) & blue));
+      else
+          col = (uint16_t)((((c >> 3) & red) << 11) | ((((c >> 3) & green) << 1) << 5) | ((c >> 3) & blue));
+      pixel_write(col);
+    }
+  }
+  pixel_flush();
+  spi_end();
+}
+
+void yama_2_GFX_ILI9341::drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[], const uint8_t bitmap_mask[], 
+                       int16_t w, int16_t h, bool red_flag, bool green_flag, bool blue_flag, bool invert) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
+  uint32_t red, green, blue;
+  uint16_t c, col;
+  int32_t  n;
+
+  if (red_flag)   red = 0x1f;
+  else            red = 0;
+  if (green_flag) green = 0x1f;
+  else            green = 0;
+  if (blue_flag)  blue = 0x1f;
+  else            blue = 0;
+
+  n = 0;
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      c = (uint16_t)*p++;
+      if (((bitmap_mask[n >> 3]) >> (7 - (n & 7)) & 1) == 1) {
+          if (invert)
+              col = (uint16_t)(((((255 - c) >> 3) & red) << 11) | (((((255 - c) >> 3) & green) << 1) << 5) | (((255 - c) >> 3) & blue));
+          else
+              col = (uint16_t)((((c >> 3) & red) << 11) | ((((c >> 3) & green) << 1) << 5) | ((c >> 3) & blue));
+          drawPixel(x + xi, y + yi, col);
+      }
+      n++;
+    }
+  }
+}
+
+void yama_2_GFX_ILI9341::drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t w, int16_t h) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
  
+  spi_begin();
+  setAddrWindow(x, y, x+w-1, y+h-1);
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      pixel_write(palette256_table[*p++]);
+    }
+  }
+  pixel_flush();
+  spi_end();
+}
+
+void yama_2_GFX_ILI9341::drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t w, int16_t h) {
+    yama_2_GFX::drawPalette256Bitmap(x, y, bitmap, bitmap_mask, w, h);
+}
+
+
+
+
+
+
+
 uint16_t yama_2_GFX_ILI9341::color(int colr, int colg, int colb) {
     uint16_t color;
     color = (uint16_t)((colr * 32 / 256) << 11) | ((colg * 64 / 256) << 5) | (colb * 32 / 256);
@@ -1058,8 +1333,9 @@ uint8_t yama_2_GFX_ILI9341::readcommand8(uint8_t commandByte, uint8_t index) {
     spi_end();
     return result;
 }
- 
- 
+
+
+
 // -------------------------------------------------------------------------
  
 // GFXcanvas1, GFXcanvas8 and GFXcanvas16 (currently a WIP, don't get too
@@ -1520,5 +1796,68 @@ void GFXcanvas16::byteSwap(void) {
     uint32_t i, pixels = WIDTH * HEIGHT;
     for (i = 0; i < pixels; i++)
       buffer[i] = __builtin_bswap16(buffer[i]);
+  }
+}
+
+
+
+
+void GFXcanvas16::drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[],
+                       int16_t w, int16_t h, bool red_flag, bool green_flag, bool blue_flag, bool invert) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
+  uint32_t red, green, blue;
+  uint16_t c, col;
+
+  if (red_flag)   red = 0x1f;
+  else            red = 0;
+  if (green_flag) green = 0x1f;
+  else            green = 0;
+  if (blue_flag)  blue = 0x1f;
+  else            blue = 0;
+
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      c = (uint16_t)*p++;
+      if (invert)
+          col = (uint16_t)(((((255 - c) >> 3) & red) << 11) | (((((255 - c) >> 3) & green) << 1) << 5) | (((255 - c) >> 3) & blue));
+      else
+          col = (uint16_t)((((c >> 3) & red) << 11) | ((((c >> 3) & green) << 1) << 5) | ((c >> 3) & blue));
+
+      drawPixel(x + xi, y + yi, col);
+    }
+  }
+}
+
+void GFXcanvas16::drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[], const uint8_t bitmap_mask[], 
+                       int16_t w, int16_t h, bool red_flag, bool green_flag, bool blue_flag, bool invert) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
+  uint32_t red, green, blue;
+  uint16_t c, col;
+  int32_t  n;
+
+  if (red_flag)   red = 0x1f;
+  else            red = 0;
+  if (green_flag) green = 0x1f;
+  else            green = 0;
+  if (blue_flag)  blue = 0x1f;
+  else            blue = 0;
+
+  n = 0;
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      c = (uint16_t)*p++;
+      if (((bitmap_mask[n >> 3]) >> (7 - (n & 7)) & 1) == 1) {
+          if (invert)
+              col = (uint16_t)(((((255 - c) >> 3) & red) << 11) | (((((255 - c) >> 3) & green) << 1) << 5) | (((255 - c) >> 3) & blue));
+          else
+              col = (uint16_t)((((c >> 3) & red) << 11) | ((((c >> 3) & green) << 1) << 5) | ((c >> 3) & blue));
+          drawPixel(x + xi, y + yi, col);
+      }
+      n++;
+    }
   }
 }

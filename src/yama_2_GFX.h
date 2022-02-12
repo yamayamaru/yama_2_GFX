@@ -1,5 +1,5 @@
 // yama_2_GFX.h
-// Version : 0.3
+// Version : 0.3.1
 //    
 //    Copyright (c) 2012 Adafruit Industries.
 //    Released under the BSD License
@@ -29,6 +29,46 @@
 #ifndef _YAMA_2_GFX_H
 #define _YAMA_2_GFX_H
  
+#define WEB216_PALETTE_BLACK      0xd7     ///< 0x0000    0,   0,   0
+#define WEB216_PALETTE_NAVY       0xda     ///< 0x0010    0,   0, 128
+#define WEB216_PALETTE_DARKGREEN  0xdc     ///< 0x0400    0, 128,   0
+#define WEB216_PALETTE_DARKCYAN   0xdb     ///< 0x0410    0, 125, 123
+#define WEB216_PALETTE_MAROON     0xdf     ///< 0x8000  128,   0,   0
+#define WEB216_PALETTE_PURPLE     0xde     ///< 0x8010  128,   0, 128
+#define WEB216_PALETTE_OLIVE      0xdd     ///< 0x8400  128, 128,   0
+#define WEB216_PALETTE_LIGHTGREY  0xd9     ///< 0xc618  198, 195, 198
+#define WEB216_PALETTE_DARKGREY   0xd8     ///< 0x8410  128, 128, 128
+#define WEB216_PALETTE_BLUE       0xd2     ///< 0x001f    0,   0, 255
+#define WEB216_PALETTE_GREEN      0xd2     ///< 0x07e0    0, 255,   0
+#define WEB216_PALETTE_CYAN       0xb4     ///< 0x07ff    0, 255, 255
+#define WEB216_PALETTE_RED        0x23     ///< 0xf800  255,   0,   0
+#define WEB216_PALETTE_MAGENTA    0x1e     ///< 0xf81f  255,   0, 255
+#define WEB216_PALETTE_YELLOW     0x05     ///< 0xffe0  255, 255,   0
+#define WEB216_PALETTE_WHITE      0x00     ///< 0xffff  255, 255, 255
+#define WEB216_PALETTE_ORANGE     0x11     ///< 0xfcc0  255, 152,   0
+#define WEB216_PALETTE_GREENYELLOW  0x4c   ///< 0x9fe6  152, 255,  48
+#define WEB216_PALETTE_PINK       0x13     ///< 0xfb59  255, 104, 200
+
+
+#define DEFAULT_PALETTE_BLACK      0x00     ///< 0x0000    0,   0,   0
+#define DEFAULT_PALETTE_NAVY       0x04     ///< 0x0010    0,   0, 128
+#define DEFAULT_PALETTE_DARKGREEN  0x02     ///< 0x0400    0, 128,   0
+#define DEFAULT_PALETTE_DARKCYAN   0x06     ///< 0x0410    0, 125, 123
+#define DEFAULT_PALETTE_MAROON     0x01     ///< 0x8000  128,   0,   0
+#define DEFAULT_PALETTE_PURPLE     0x05     ///< 0x8010  128,   0, 128
+#define DEFAULT_PALETTE_OLIVE      0x03     ///< 0x8400  128, 128,   0
+#define DEFAULT_PALETTE_LIGHTGREY  0x07     ///< 0xc618  198, 195, 198
+#define DEFAULT_PALETTE_DARKGREY   0xf8     ///< 0x8410  128, 128, 128
+#define DEFAULT_PALETTE_BLUE       0xfc     ///< 0x001f    0,   0, 255
+#define DEFAULT_PALETTE_GREEN      0xfa     ///< 0x07e0    0, 255,   0
+#define DEFAULT_PALETTE_CYAN       0xfe     ///< 0x07ff    0, 255, 255
+#define DEFAULT_PALETTE_RED        0xf9     ///< 0xf800  255,   0,   0
+#define DEFAULT_PALETTE_MAGENTA    0xfd     ///< 0xf81f  255,   0, 255
+#define DEFAULT_PALETTE_YELLOW     0xfb     ///< 0xffe0  255, 255,   0
+#define DEFAULT_PALETTE_WHITE      0xff     ///< 0xffff  255, 255, 255
+#define DEFAULT_PALETTE_ORANGE     0xc6     ///< 0xfce0  255, 156,   0
+#define DEFAULT_PALETTE_GREENYELLOW  0x8d   ///< 0xafea  168, 255,  80
+#define DEFAULT_PALETTE_PINK       0xc0     ///< 0xfaf5  255,  92, 168
  
 #define yama_2_GFX_min(a, b) (((a) < (b)) ? (a) : (b))
 #define yama_2_GFX_swap_int16_t(a, b)                                                    \
@@ -38,7 +78,7 @@
     b = t;                                                                     \
 }
 #define yama_2_GFX_abs(a)    ((a >= 0) ? a : (-(a)))
- 
+
 class yama_2_GFX {
 protected:
     int16_t  WIDTH;
@@ -46,6 +86,13 @@ protected:
     int16_t  _width;
     int16_t  _height;
     uint8_t  rotation = 0;
+
+
+    inline int bit_test(const uint8_t *data, int n) {
+        return (data[n >> 3] >> (7 - (n & 7))) & 1;
+    }
+
+
 public:
     yama_2_GFX(int16_t w, int16_t h);
     virtual void drawPixel(int16_t x, int16_t y, uint16_t color) = 0;
@@ -95,6 +142,16 @@ public:
                                   int16_t h, uint16_t color);
     void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w,
                                   int16_t h, uint16_t color, uint16_t bg);
+
+
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap01, const uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg);
+    void drawBitmap(int16_t x, int16_t y, uint8_t *bitmap01, uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg);
+
+
     void drawXBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
                                    int16_t w, int16_t h, uint16_t color);
     void drawGrayscaleBitmap(int16_t x, int16_t y,
@@ -116,10 +173,29 @@ public:
                                      const uint8_t mask[], int16_t w, int16_t h);
     void drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap,
                                      uint8_t *mask, int16_t w, int16_t h);
+
+
+    void drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t width, int16_t height);
+    void drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t width, int16_t height);
+    void setDefaultPalette256();
+    void setWeb216Palette256();
+    void setPalette256(uint8_t palette_num, uint16_t color);
+    uint16_t getPalette256(uint8_t palette_num);
+
+
     uint16_t width(void);
     uint16_t height(void);
  
- 
+
+
+protected:
+    static const int palette_number = 256;
+    uint16_t palette256_table[palette_number];
+    static const uint16_t default_palette256_data[];
+    static const uint16_t web216_palette256_data[];
 };
  
 #endif // _YAMA_2_GFX_H
@@ -274,6 +350,36 @@ public:
     void drawRGBBitmap(int16_t x, int16_t y,
                            const uint16_t bitmap[],
                            int16_t w, int16_t h);
+
+
+
+
+    void drawRGBBitmap(int16_t x, int16_t y,
+                           const uint16_t bitmap[], const uint8_t bitmap_mask[],
+                           int16_t w, int16_t h);
+    void drawBitmap(int16_t x, int16_t y,const uint8_t bitmap[],
+                            int16_t w, int16_t h,
+                        uint16_t color);
+    void drawBitmap(int16_t x, int16_t y, const uint8_t *bitmap01, const uint8_t *bitmap_mask01,
+                                  int16_t width, int16_t height,
+                                  uint16_t fg, uint16_t bg);
+    void drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[],
+                       int16_t w, int16_t h, bool red_flag=true, bool green_flag=true,
+                       bool blue_flag=true, bool invert=false);
+    void drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                       int16_t w, int16_t h, bool red_flag=true, bool green_flag=true,
+                       bool blue_flag=true, bool invert=false);
+    void drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t w, int16_t h);
+    void drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t w, int16_t h);
+
+
+
+
     uint16_t color(int colr, int colg, int colb);
     uint16_t color565(int colr, int colg, int colb);
     void sendCommand(uint8_t commandByte, uint8_t *dataBytes, uint8_t numDataBytes);
@@ -346,6 +452,18 @@ public:
   void fillScreen(uint16_t color);
   void byteSwap(void);
   uint16_t getPixel(int16_t x, int16_t y) const;
+
+
+  void drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[],
+                       int16_t w, int16_t h, bool red_flag=true, bool green_flag=true,
+                       bool blue_flag=true, bool invert=false);
+  void drawGrayscaleBitmap(int16_t x, int16_t y,
+                       const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                       int16_t w, int16_t h, bool red_flag=true, bool green_flag=true,
+                       bool blue_flag=true, bool invert=false);
+
+
   /**********************************************************************/
   /*!
     @brief    Get a pointer to the internal buffer memory
