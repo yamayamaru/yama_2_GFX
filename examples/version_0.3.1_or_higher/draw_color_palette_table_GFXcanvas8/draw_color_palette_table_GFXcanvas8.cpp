@@ -28,9 +28,6 @@ yama_2_GFX_ILI9341 tft = yama_2_GFX_ILI9341(SPI_PORT, DC, RST, CS);
 GFXcanvas8 canvas01 = GFXcanvas8(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT);
 
 
-extern uint16_t default_palette_data[]; 
-extern uint16_t web216_palette_data[];
-
 void loop01(void);
 
 int main() {
