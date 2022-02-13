@@ -4,6 +4,7 @@ drawPalette256Bitmapは1ピクセル8bitのビットマップデータを
 パレットに登録された色データを元に16bitのRGB565に変換して描画するものです。  
 デフォルトのパレットとweb216のパレットデータをあらかじめ所持していて  
 setDefaultPalette256()とsetWeb216Palette256()で簡単に初期化可能です。  
+初期状態ではsetDefaultPalette256()で初期化されています。  
 また、setPalette256(uint8_t palette_num, uint16_t color)で自由にパレットデータを書き換えることが可能です。  
 setPalette256で設定するcolorはRGB565の16bit値です。  
 uint16_t getPalette256(uint8_t palette_num)で現在のパレットのデータを取得することも可能です。  
