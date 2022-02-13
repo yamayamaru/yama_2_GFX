@@ -11,7 +11,7 @@ drawRGBBitmap、drawBitmap、drawGrayscaleBitmap、drawPalette256Bitmapで扱う
 横64、縦64を左上のピクセルから順番に単純にビットを並べた配列になります。  
 ビットの並びはMSBが先でLSBが後方になります。  
 8ピクセルで1バイトになります。  
-bitmap01の配列の長さは64 * 64 = 4096バイトになります。  
+bitmap01の配列の長さは64 * 64 / 8 = 512バイトになります。  
 drawBitmapで扱うbitmap画像はこのフォーマットになります。  
   
 ![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
