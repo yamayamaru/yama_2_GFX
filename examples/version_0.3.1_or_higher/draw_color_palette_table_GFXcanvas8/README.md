@@ -5,6 +5,7 @@ drawPalette256Bitmapは1ピクセル8bitのビットマップデータを
 デフォルトのパレットとweb216のパレットデータをあらかじめ所持していて  
 setDefaultPalette256()とsetWeb216Palette256()で簡単に初期化可能です。  
 また、setPalette256(uint8_t palette_num, uint16_t color)で自由にパレットデータを書き換えることが可能です。  
+setPalette256で設定するcolorはRGB565の16bit値です。  
 uint16_t getPalette256(uint8_t palette_num)で現在のパレットのデータを取得することも可能です。  
   
 ![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
