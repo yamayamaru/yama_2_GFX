@@ -1,7 +1,7 @@
 /*
 
     Raspberry Pi Pico pico-sdk LCD ILI9341 Graphics Library (C++)
-    yama_2_GFX demo program draw_8bit_bitmap_picture_GFXcanvas8.cpp
+    yama_2_GFX demo program draw_8bit_bitmap_picture.cpp
                                       https://twitter.com/yama23238
 
 */
@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "yama_2_GFX.h"
+
 
 #define MOSI 19
 #define SCK  18
@@ -23,9 +24,6 @@
 
 
 yama_2_GFX_ILI9341 tft = yama_2_GFX_ILI9341(SPI_PORT, DC, RST, CS);
-
-GFXcanvas8 canvas01 = GFXcanvas8(ILI9341_TFTWIDTH, ILI9341_TFTHEIGHT);
-
 
 void loop01(void);
 
@@ -47,9 +45,6 @@ int main() {
   printf("ILI9341 Test!\r\n"); 
   tft.setRotation(0);
 
-  canvas01.setRotation(0);
-  canvas01.fillScreen(WEB216_PALETTE_BLACK);
-
   while (1) {
     loop01();
   }
@@ -58,8 +53,6 @@ int main() {
 
 void set_palette01(const uint16_t *palette_data) {
     for (int i = 0; i < 256; i++) {
-        // yama_2_GFX_ILI9341のdrawPalette256Bitmapで使うためなので
-        // yama_2_GFX_ILI9341のパレットを変更する必要がある
         tft.setPalette256(i, palette_data[i]);
     }
 }
@@ -77,28 +70,23 @@ extern const uint8_t bitmap05[];
 
 void loop01(void) {
     set_palette01(palette_data01);
-    canvas01.drawGrayscaleBitmap(0, 0, bitmap01, canvas01.width(), canvas01.height());
-    tft.drawPalette256Bitmap(0, 0, (uint8_t *)canvas01.getBuffer(), canvas01.width(), canvas01.height());
+    tft.drawPalette256Bitmap(0, 0, bitmap01, tft.width(), tft.height());
     sleep_ms(20000);
 
     set_palette01(palette_data02);
-    canvas01.drawGrayscaleBitmap(0, 0, bitmap02, canvas01.width(), canvas01.height());
-    tft.drawPalette256Bitmap(0, 0, (uint8_t *)canvas01.getBuffer(), canvas01.width(), canvas01.height());
+    tft.drawPalette256Bitmap(0, 0, bitmap02, tft.width(), tft.height());
     sleep_ms(20000);
 
     set_palette01(palette_data03);
-    canvas01.drawGrayscaleBitmap(0, 0, bitmap03, canvas01.width(), canvas01.height());
-    tft.drawPalette256Bitmap(0, 0, (uint8_t *)canvas01.getBuffer(), canvas01.width(), canvas01.height());
+    tft.drawPalette256Bitmap(0, 0, bitmap03, tft.width(), tft.height());
     sleep_ms(20000);
 
     set_palette01(palette_data04);
-    canvas01.drawGrayscaleBitmap(0, 0, bitmap04, canvas01.width(), canvas01.height());
-    tft.drawPalette256Bitmap(0, 0, (uint8_t *)canvas01.getBuffer(), canvas01.width(), canvas01.height());
+    tft.drawPalette256Bitmap(0, 0, bitmap04, tft.width(), tft.height());
     sleep_ms(20000);
 
     set_palette01(palette_data05);
-    canvas01.drawGrayscaleBitmap(0, 0, bitmap05, canvas01.width(), canvas01.height());
-    tft.drawPalette256Bitmap(0, 0, (uint8_t *)canvas01.getBuffer(), canvas01.width(), canvas01.height());
+    tft.drawPalette256Bitmap(0, 0, bitmap05, tft.width(), tft.height());
     sleep_ms(20000);
 }
 
