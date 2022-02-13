@@ -3,6 +3,7 @@ yama_2_GFX.h、yama_2_GFX.cpp、random_raspberry.cpp、CMakeLists.txtを同じ�
 プログラム中のbitmap_mask01は32x32のピクセルのうち、透明色を0、色の付いたものを1にしたビットデータです。  
 左上のピクセルから順番にビットで表現したものです。  
 ビットの並びはMSBから始まります。  
+8ピクセルで1バイトになります。  
 配列の長さは32 * 32 / 8 = 128バイトになります。  
 drawRGBBitmap、drawBitmap、drawGrayscaleBitmap、drawPalette256Bitmapで扱うマスクデータはこのフォーマットになります。  
   
