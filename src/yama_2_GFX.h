@@ -180,11 +180,23 @@ public:
     void drawPalette256Bitmap(int16_t x, int16_t y, 
                                      const uint8_t bitmap[], const uint8_t bitmap_mask[],
                                      int16_t width, int16_t height);
+
+
+
+    void drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t width, int16_t height, const uint16_t *palette_table_address);
+    void drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t width, int16_t height, const uint16_t *palette_table_address);
+
+
+
     void setDefaultPalette256();
     void setWeb216Palette256();
     void setPalette256(uint8_t palette_num, uint16_t color);
     uint16_t getPalette256(uint8_t palette_num);
 
+    uint16_t *getPalette256Table();
 
     uint16_t width(void);
     uint16_t height(void);
@@ -377,6 +389,11 @@ public:
                                      const uint8_t bitmap[], const uint8_t bitmap_mask[],
                                      int16_t w, int16_t h);
 
+    void drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t w, int16_t h, const uint16_t *palette_table_address);
+    void drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t w, int16_t h, const uint16_t *palette_table_address);
 
 
 
