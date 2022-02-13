@@ -8,7 +8,8 @@ RGB565は1ピクセルを赤を5bit、緑を6bit、青を5ビットの16bit(2バ
 横320ピクセル、縦240ピクセルを横方向に順番に単に並べただけの配列です。  
 配列の長さは2 * 320 * 240 = 153600になります。  
 bitmap02も同様です。  
-drawRGBBitmapで描画するbitmapのフォーマットはこのフォーマットになります。
+drawRGBBitmapで描画するbitmapのフォーマットはこのフォーマットになります。  
+基本的にILI9341で扱う色はこのRGB565になります。  
   
 ![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
 ソースコードに書かれてるMOSI、SCK、CS、MISOやRST、DCの番号はGPIOの番号です  
