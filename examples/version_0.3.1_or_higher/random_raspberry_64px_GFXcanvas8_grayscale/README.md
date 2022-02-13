@@ -1,5 +1,16 @@
 yama_2_GFX.h、yama_2_GFX.cpp、random_raspberry_64px_GFXcanvas8_grayscale.cpp、CMakeLists.txtを同じフォルダに置き pico-sdkでビルドしてください。  
   
+プログラム中のbitmap_mask01は64x64のピクセルのうち、透明色を0、色の付いたものを1にしたビットデータです。  
+左上のピクセルから順番にビットで表現したものです。  
+ビットの並びはMSBから始まります。  
+配列の長さは64 * 64 / 8 = 512バイトになります。  
+drawRGBBitmap、drawBitmap、drawGrayscaleBitmap、drawPalette256Bitmapで扱うマスクデータはこのフォーマットになります。  
+  
+プログラム中のbitmap01は1ピクセル8bit(1バイト)を  
+横64、縦64を左上から右方向に順番に単純に並べただけの配列です。  
+1ピクセル1バイトなので1ピクセルあたり256色の表現可能です。  
+bitmap01の配列の長さは64 * 64 = 4096バイトになります。  
+drawPalette256BitmapやdrawGrayscaleBitmapで扱うbitmap画像はこのフォーマットになります。  
   
 ![pico pinout](https://github.com/yamayamaru/yama_2_GFX/blob/main/img/raspberrypipicopinout.jpg)  
 ソースコードに書かれてるMOSI、SCK、CS、MISOやRST、DCの番号はGPIOの番号です  
