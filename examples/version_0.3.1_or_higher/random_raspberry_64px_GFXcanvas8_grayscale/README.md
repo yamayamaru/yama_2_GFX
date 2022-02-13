@@ -3,6 +3,7 @@ yama_2_GFX.h、yama_2_GFX.cpp、random_raspberry_64px_GFXcanvas8_grayscale.cpp�
 プログラム中のbitmap_mask01は64x64のピクセルのうち、透明色を0、色の付いたものを1にしたビットデータです。  
 左上のピクセルから順番にビットで表現したものです。  
 ビットの並びはMSBから始まります。  
+8ピクセルで1バイトになります。  
 配列の長さは64 * 64 / 8 = 512バイトになります。  
 drawRGBBitmap、drawBitmap、drawGrayscaleBitmap、drawPalette256Bitmapで扱うマスクデータはこのフォーマットになります。  
   
