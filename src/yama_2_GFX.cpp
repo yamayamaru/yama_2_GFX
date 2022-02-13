@@ -715,6 +715,40 @@ void yama_2_GFX::drawPalette256Bitmap(int16_t x, int16_t y,
     endWrite();
 }
 
+
+
+void yama_2_GFX::drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t width, int16_t height, const uint16_t *palette_table_address) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            writePixel(x + i, y + j, palette_table_address[bitmap[n]]);
+        }
+    }
+    endWrite();
+}
+
+void yama_2_GFX::drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t width, int16_t height, const uint16_t *palette_table_address) {
+    int i, j, n;
+    startWrite();
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
+            n = j * width + i;
+            if (bit_test(bitmap_mask, n)) {
+                writePixel(x + i, y + j, palette_table_address[bitmap[n]]);
+            }
+        }
+    }
+    endWrite();
+}
+
+
+
+
 void yama_2_GFX::setDefaultPalette256() {
     memcpy(palette256_table, default_palette256_data, palette_number * 2);
 }
@@ -731,6 +765,12 @@ void yama_2_GFX::setPalette256(uint8_t palette_num, uint16_t color) {
 uint16_t yama_2_GFX::getPalette256(uint8_t palette_num) {
     return palette256_table[palette_num];
 }
+
+
+uint16_t *yama_2_GFX::getPalette256Table(){
+    return (uint16_t *)palette256_table;
+};
+
 
 const uint16_t yama_2_GFX::default_palette256_data[] = {
     0x0000, 0x8000, 0x0400, 0x8400, 0x0010, 0x8010, 0x0410, 0xc618, 
@@ -1278,6 +1318,32 @@ void yama_2_GFX_ILI9341::drawPalette256Bitmap(int16_t x, int16_t y,
                                      const uint8_t bitmap[], const uint8_t bitmap_mask[],
                                      int16_t w, int16_t h) {
     yama_2_GFX::drawPalette256Bitmap(x, y, bitmap, bitmap_mask, w, h);
+}
+
+
+
+
+
+void yama_2_GFX_ILI9341::drawPalette256Bitmap(int16_t x, int16_t y, const uint8_t bitmap[],
+                                     int16_t w, int16_t h, const uint16_t *palette_table_address) {
+  int16_t xi,yi;
+  const uint8_t *p = bitmap;
+ 
+  spi_begin();
+  setAddrWindow(x, y, x+w-1, y+h-1);
+  for(yi=0; yi<h; yi++){
+    for(xi=0; xi<w; xi++) {
+      pixel_write(palette_table_address[*p++]);
+    }
+  }
+  pixel_flush();
+  spi_end();
+}
+
+void yama_2_GFX_ILI9341::drawPalette256Bitmap(int16_t x, int16_t y, 
+                                     const uint8_t bitmap[], const uint8_t bitmap_mask[],
+                                     int16_t w, int16_t h, const uint16_t *palette_table_address) {
+    yama_2_GFX::drawPalette256Bitmap(x, y, bitmap, bitmap_mask, w, h, palette_table_address);
 }
 
 
