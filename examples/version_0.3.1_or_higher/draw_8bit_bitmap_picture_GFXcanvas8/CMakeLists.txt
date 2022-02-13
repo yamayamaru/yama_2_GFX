@@ -12,7 +12,7 @@ pico_sdk_init()
 
 add_executable(
       draw_8bit_bitmap_picture_GFXcanvas8   draw_8bit_bitmap_picture_GFXcanvas8.cpp
-                                yama_2_GFX.cpp
+                                            yama_2_GFX.cpp
 )
 
 target_link_libraries(  draw_8bit_bitmap_picture_GFXcanvas8
